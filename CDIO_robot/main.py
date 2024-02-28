@@ -14,7 +14,18 @@ from pybricks.media.ev3dev import SoundFile, ImageFile
 
 # Create your objects here.
 ev3 = EV3Brick()
-
-
+left_motor = Motor(Port.B)
+right_motor = Motor(Port.D)
+obstacle_sensor = UltrasonicSensor(Port.S2)
 # Write your program here.
 ev3.speaker.beep()
+
+robot = DriveBase(left_motor,right_motor)
+
+while true:
+    robot.drive(200,0)
+
+    while obstacle_sensor.distance() > 300:
+        wait(10)
+    robot.straight(-300)
+    robot.turn(120)
