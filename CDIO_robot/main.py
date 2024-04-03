@@ -1,31 +1,34 @@
 #!/usr/bin/env pybricks-micropython
 from pybricks.hubs import EV3Brick
-from pybricks.ev3devices import (Motor, TouchSensor, ColorSensor,
-                                 InfraredSensor, UltrasonicSensor, GyroSensor)
-from pybricks.parameters import Port, Stop, Direction, Button, Color
-from pybricks.tools import wait, StopWatch, DataLog
-from pybricks.robotics import DriveBase
-from pybricks.media.ev3dev import SoundFile, ImageFile
-
-
-# This program requires LEGO EV3 MicroPython v2.0 or higher.
-# Click "Open user guide" on the EV3 extension tab for more information.
-
+from pybricks.ev3devices import Motor
+from pybricks.parameters import Port
+from pybricks.hubs import EV3Brick
+from pybricks.ev3devices import Motor
+from pybricks.parameters import Stop, Direction
+from pybricks.tools import wait
 
 # Create your objects here.
 ev3 = EV3Brick()
-left_motor = Motor(Port.B)
-right_motor = Motor(Port.D)
-obstacle_sensor = UltrasonicSensor(Port.S2)
+left_motor = Motor(Port.A)
+right_motor = Motor(Port.C)
+indsamler = Motor(Port.D)
+
 # Write your program here.
 ev3.speaker.beep()
 
-robot = DriveBase(left_motor,right_motor)
+# Run indsamler concurrently while testing left and right motors
+indsamler.run(speed=800)
 
-while true:
-    robot.drive(200,0)
+# Run left and right motors together
+left_motor.run(-200)
+right_motor.run(-200)
 
-    while obstacle_sensor.distance() > 300:
-        wait(10)
-    robot.straight(-300)
-    robot.turn(120)
+# Wait for 3 seconds
+wait(20000)
+
+# Stop left and right motors
+left_motor.stop()
+right_motor.stop()
+
+# Stop indsamler
+indsamler.stop()
